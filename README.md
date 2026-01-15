@@ -2,6 +2,8 @@
 
 A Python-based chess game with an AI opponent powered by Pygame. This project implements a full chess engine with move validation, AI decision-making, and a graphical user interface.
 
+https://github.com/user-attachments/assets/db1cdd49-d018-43a3-a60c-2a1da35fdef0
+
 ## Features
 
 - **Full Chess Engine**: Complete chess rules implementation including castling, en passant, and pawn promotion
