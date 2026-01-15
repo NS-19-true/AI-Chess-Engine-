@@ -15,12 +15,95 @@ https://github.com/user-attachments/assets/db1cdd49-d018-43a3-a60c-2a1da35fdef0
 ## Project Structure
 
 ```
-├── ChessMain.py      - Main driver file, handles UI and user input
-├── ChessEngine.py    - Core chess engine with game state and move validation
-├── ChessAI.py        - AI logic for opponent moves
-├── images/           - Chess piece images
-└── requirements.txt  - Python dependencies
+├── ChessMain.py          - Main driver file (UI and game flow)
+├── ChessEngine.py        - Refactored game engine (core logic)
+├── ChessAI.py            - Refactored AI opponent
+├── constants.py          - Game constants and configuration
+├── move.py               - Move and CastleRights classes
+├── piece_moves.py        - All piece movement logic
+├── check_detection.py    - Pin and check detection algorithms
+├── evaluation.py         - AI board evaluation functions
+├── images/               - Chess piece images
+├── ChessEngine_old.py    - Backup of original monolithic engine
+└── requirements.txt      - Python dependencies
 ```
+
+## Modular Architecture
+
+The code has been refactored into a clean, modular structure for better maintainability and code organization:
+
+### Core Modules
+
+#### `constants.py`
+- Centralized configuration for all game parameters
+- Board dimensions, UI constants, AI parameters
+- Piece evaluation tables (positional scores for each piece type)
+- Initial board setup and default values
+- **Benefits**: Easy to tweak game behavior without searching through code
+
+#### `move.py`
+- **`Move` class**: Represents a chess move with source/destination
+  - Handles special moves (castling, en passant, pawn promotion)
+  - Converts between array indices and chess notation (e.g., 'a1', 'e4')
+  - Move equality and string representations
+  
+- **`CastleRights` class**: Tracks castling availability for both players
+  - Updates based on king/rook movements
+- **Benefits**: Encapsulates move logic in a dedicated, reusable class
+
+#### `check_detection.py`
+- Advanced **ray-casting algorithm** for pin and check detection
+- `checkForPinsAndChecks()`: Main detection function
+- Helper functions for validating attack directions
+- Separate knight check detection
+- **Benefits**: Complex algorithm isolated, easier to optimize or modify
+
+#### `piece_moves.py`
+- Individual movement functions for each piece type:
+  - `getPawnMoves()`: Pawn advances, captures, en passant, promotion
+  - `getRookMoves()`: Horizontal/vertical movement
+  - `getKnightMoves()`: L-shaped movement
+  - `getBishopMoves()`: Diagonal movement
+  - `getQueenMoves()`: Combination of rook and bishop
+  - `getKingMoves()`: Single-square movement with safety checks
+- All functions respect pinned pieces and board boundaries
+- **Benefits**: Each piece's logic in one place, easy to debug or enhance
+
+#### `evaluation.py`
+- `scoreBoard()`: Evaluates board positions for AI
+  - Material count (piece values)
+  - Positional bonuses (where pieces are positioned)
+  - Checkmate/stalemate detection
+- `evaluatePiece()`: Evaluates individual pieces
+- **Benefits**: Evaluation logic separated from game engine, easier to improve AI
+
+#### `ChessEngine.py` (Refactored)
+- **`GameState` class**: Core game state management
+  - Board representation
+  - Move logging and undo functionality
+  - Castling rights tracking
+  - En passant tracking
+  - Game status (check, checkmate, stalemate)
+  - Delegates piece movement to `piece_moves` module
+  - Delegates pin/check detection to `check_detection` module
+- Reduced from 650+ lines to focused, maintainable code
+- Clear separation of concerns
+- **Benefits**: Much easier to understand and maintain
+
+#### `ChessAI.py` (Refactored)
+- `findBestMove()`: Finds optimal move using AI
+- `findMoveNegaMaxAlphaBeta()`: Negamax with alpha-beta pruning algorithm
+- `findRandomMove()`: Fallback for move selection
+- Uses `evaluation` module for position scoring
+- **Benefits**: AI logic is clean, uses external evaluation module
+
+#### `ChessMain.py`
+- UI rendering and user input handling
+- Game flow control
+- Pygame integration
+- Now imports constants from `constants.py`
+- **Benefits**: Cleaner imports, easier to modify game parameters
+
 
 ## Requirements
 

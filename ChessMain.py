@@ -1,19 +1,16 @@
 """
 Main driver file.
-Handling user input.
-Displaying current GameStatus object.
+Handles UI, user input, and game flow using Pygame.
 """
+
 import pygame as p
 import ChessEngine, ChessAI
 import sys
 from multiprocessing import Process, Queue
-
-BOARD_WIDTH = BOARD_HEIGHT = 512
-MOVE_LOG_PANEL_WIDTH = 250
-MOVE_LOG_PANEL_HEIGHT = BOARD_HEIGHT
-DIMENSION = 8
-SQUARE_SIZE = BOARD_HEIGHT // DIMENSION
-MAX_FPS = 15
+from constants import (
+    BOARD_WIDTH, BOARD_HEIGHT, MOVE_LOG_PANEL_WIDTH, MOVE_LOG_PANEL_HEIGHT,
+    DIMENSION, SQUARE_SIZE, MAX_FPS
+)
 IMAGES = {}
 
 
